@@ -48,7 +48,7 @@ SELECT posts.user_id, COUNT(*) AS post_count FROM posts GROUP BY posts.user_id;
 
 -- 8. Show only the user_id values for users who have written more than 2 posts.
 --    Include the post count. Name the count column post_count.
-SELECT posts.user_id, COUNT(*) AS post_count FROM posts GROUP BY posts.user_id HAVING COUNT(posts) > 2;
+SELECT posts.user_id, COUNT(*) AS post_count FROM posts GROUP BY posts.user_id HAVING COUNT(*) > 2;
 
 -- ============================================================
 -- Part 4: JOIN Queries
@@ -73,26 +73,29 @@ SELECT tags.name FROM tags INNER JOIN post_tags ON tags.tag_id = post_tags.tag_i
 -- 12. Show the title and author username of every post that has
 --     the tag 'javascript'.
 --     Show title and username.
-
+SELECT users.username, posts.title FROM users INNER JOIN posts ON users.user_id = posts.user_id INNER JOIN post_tags ON posts.post_id = post_tags.post_id INNER JOIN tags ON post_tags.tag_id = tags.tag_id WHERE tags.name = 'javascript';
 
 -- 13. Show each tag name and how many posts use it.
 --     Name the count column post_count.
---     Order by post_count from highest to lowest.
-
+--     Order by post_count from highest to lowest.e
+SELECT tags.name, COUNT(posts.post_id) AS post_count FROM posts INNER JOIN post_tags ON posts.post_id = post_tags.post_id INNER JOIN tags ON post_tags.tag_id = tags.tag_id GROUP BY tags.name ORDER BY COUNT(posts.post_id) DESC;
 
 -- 14. Show the title of every post that has no tags.
 --     Hint: use a LEFT JOIN on post_tags and filter for NULL.
-
+SELECT posts.title FROM posts LEFT JOIN post_tags ON posts.post_id = post_tags.post_id WHERE post_tags.tag_id IS NULL;
 
 -- ============================================================
 -- Part 5: INSERT, UPDATE, DELETE — Modifying Data
 -- ============================================================
 
 -- 15. Insert a new user with username 'grace_h' and email 'grace@example.com'.
-
+INSERT INTO users (username, email) VALUES ('grace_h', 'grace@example.com');
 
 -- 16. Update the title of the post with post_id = 7 to
 --     'CSS Grid vs Flexbox: A Complete Guide'.
-
+UPDATE posts
+SET title = 'CSS Grid vs Flexbox: A Complete Guide'
+WHERE post_id = 7;
 
 -- 17. Delete the tag with tag_id = 6.
+DELETE from tags WHERE tag_id = 6;
